@@ -1,3 +1,13 @@
+# web automation
 selenium
 pylightxl
 webdriver-manager
+# for model inference
+pyyaml
+torch 
+pandas
+torchvision
+opencv-python
+tqdm
+matplotlib
+seaborn
