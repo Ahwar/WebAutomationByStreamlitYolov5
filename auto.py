@@ -1,5 +1,3 @@
-# new code as of 7:11 pm Thursday, 24 March 2022 (GMT+5), this code is extracted
-# from .exe file that was made before
 # decompyle3 version 3.8.0
 # Python bytecode 3.7.0 (3394)
 # Decompiled from: Python 3.7.0 (v3.7.0:1bf9cc5093, Jun 27 2018, 04:59:51) [MSC v.1914 64 bit (AMD64)]
@@ -8,13 +6,16 @@ import os
 from datetime import datetime, timedelta
 import time, cv2, sys, socket, numpy as np, shutil, time, onnxruntime
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
-model_name = "yolov3_captcha_20210624"
+model_name = "models/yolov3_captcha_20210624"
 """
 if datetime.now().strftime('%Y-%m') == '2021-06' or datetime.now().strftime('%Y-%m') == '2021-07':
     session = onnxruntime.InferenceSession(f"{model_name}.onnx")
@@ -65,11 +66,20 @@ NUM_CLASS = {
 
 
 def WaitToLoadWD(driver, time, locator):
+    """wait for element by locator parameter to get loaded"""
     WebDriverWait(driver, time).until(
         lambda driver: driver.find_element(By.XPATH, value=locator)
     )
     element = driver.find_element(By.XPATH, value=locator)
 
+    return element
+
+
+def WaitToBeClickable(driver, time, locator):
+    """wait for element by locator parameter to be clickable"""
+    element = WebDriverWait(driver, time).until(
+        EC.element_to_be_clickable((By.XPATH, locator))
+    )
     return element
 
 
@@ -79,6 +89,7 @@ def Move_to_web_element(driver, element):
 
 
 def SimpleClick(driver, el):
+    """Simply click on the element"""
     el.click()
 
 
@@ -91,6 +102,7 @@ def CheckExistsByXpath(driver, locator):
 
 
 def SimpleSelect(driver, element, text):
+    """Select drop down menu by visible text"""
     select = Select(element)
     select.select_by_visible_text(text)
 
@@ -298,13 +310,11 @@ def get_captcha(driver, element, path, INPUT):
     return result
 
 
-driver_path = os.getcwd() + "\\chromedriver.exe"
+driver_path = "C:/Users/zubaria.farrukh/.wdm/drivers/chromedriver/win32/99.0.4844.51/chromedriver.exe"
 download_path = os.getcwd()
 profile_path = ""
 eGOV = "https://www.e-gov.az/az/services/read/3766/0"
-ops = webdriver.ChromeOptions()
-ops.add_argument("--log-level=3")
-driver = webdriver.Chrome(executable_path=driver_path, options=ops)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get(eGOV)
 driver.set_window_size(1080, 1080)
 
@@ -345,10 +355,10 @@ if INPUT == "9":
     Menzil = input("Mənzil nömrəsi: ")
     case = 1
 if INPUT == "10":
-    Bina = input("Bina nömrəsi: ")
-    Giris = input("Giriş nömrəsi: ")
-    Mertebe = input("Mərtəbə nömrəsi: ")
-    Menzil = input("Mənzil nömrəsi: ")
+    # Bina = input("Bina nömrəsi: ")
+    # Giris = input("Giriş nömrəsi: ")
+    # Mertebe = input("Mərtəbə nömrəsi: ")
+    # Menzil = input("Mənzil nömrəsi: ")
     case = 2
 input("Press Enter to solve CAPTCHA...")
 
@@ -461,34 +471,34 @@ WebDriverWait(driver, 10).until(
 while 1:
     if INPUT == "9" or INPUT == "10":
 
-        Option1 = WaitToLoadWD(
+        Option1 = WaitToBeClickable(
             driver,
             10,
             "//*[@id='address']/form/div[3]/div[2]/div[1]/div[1]/div[1]/div/div[2]/select",
         )
         if Option1:
-            SimpleSelect(driver, Option1, "4")
-        Option2 = WaitToLoadWD(
+            SimpleSelect(driver, Option1, str(Bina))
+        Option2 = WaitToBeClickable(
             driver,
             10,
             "//*[@id='address']/form/div[3]/div[2]/div[1]/div[1]/div[2]/div/div[2]/select",
         )
         if Option2:
-            SimpleSelect(driver, Option2, "27")
-        Option3 = WaitToLoadWD(
+            SimpleSelect(driver, Option2, str(Giris))
+        Option3 = WaitToBeClickable(
             driver,
             10,
             "//*[@id='address']/form/div[3]/div[2]/div[1]/div[1]/div[3]/div/div[2]/select",
         )
         if Option3:
-            SimpleSelect(driver, Option3, "4")
-        Option4 = WaitToLoadWD(
+            SimpleSelect(driver, Option3, str(Mertebe))
+        Option4 = WaitToBeClickable(
             driver,
             10,
             "//*[@id='address']/form/div[3]/div[2]/div[1]/div[1]/div[4]/div/div[2]/select",
         )
         if Option4:
-            SimpleSelect(driver, Option4, "1")
+            SimpleSelect(driver, Option4, str(Menzil))
     else:
         if INPUT == "1" or "2" or "4" or "5" or "7":
             mertebeli7 = WaitToLoadWD(
