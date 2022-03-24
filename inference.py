@@ -33,7 +33,7 @@ def predict_captcha(model, img_path, input_max_size):
 
 
 # load model
-model = load_model("best.pt", 0.25)
+model = load_model("models/best.pt", 0.25)
 # make prediction
 predicted, pred = predict_captcha(model, "24C2Q2.png", 320)
 print("prediction: ", pred)
