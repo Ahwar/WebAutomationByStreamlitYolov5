@@ -64,9 +64,9 @@ NUM_CLASS = {
     30: "9",
 }
 
-
+# wait for element to get loaded by searching Xpath
 def WaitToLoadWD(driver, time, locator):
-    """wait for element by locator parameter to get loaded"""
+    """wait for element to get loaded by searching Xpath"""
     WebDriverWait(driver, time).until(
         lambda driver: driver.find_element(By.XPATH, value=locator)
     )
@@ -75,8 +75,9 @@ def WaitToLoadWD(driver, time, locator):
     return element
 
 
+# wait for element to be clickable by searching Xpath
 def WaitToBeClickable(driver, time, locator):
-    """wait for element by locator parameter to be clickable"""
+    """wait for element to be clickable by searching Xpath"""
     element = WebDriverWait(driver, time).until(
         EC.element_to_be_clickable((By.XPATH, locator))
     )
@@ -88,12 +89,15 @@ def Move_to_web_element(driver, element):
     actions.move_to_element_with_offset(element, 5, 5).perform()
 
 
+## Simply click on the element
 def SimpleClick(driver, el):
     """Simply click on the element"""
     el.click()
 
 
+# check if element exists by searching by XPath
 def CheckExistsByXpath(driver, locator):
+    """check if element exists by searching by XPath"""
     WebDriverWait(driver, 10).until(
         lambda driver: driver.find_element(By.XPATH, value=locator)
     )
@@ -101,6 +105,7 @@ def CheckExistsByXpath(driver, locator):
     return element
 
 
+# Select drop down menu by visible text
 def SimpleSelect(driver, element, text):
     """Select drop down menu by visible text"""
     select = Select(element)

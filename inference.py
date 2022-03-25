@@ -1,4 +1,3 @@
-import pandas
 import torch
 import time
 
@@ -9,7 +8,7 @@ def load_model(model_name, pred_conf):
     # Model
     model = torch.hub.load("ultralytics/yolov5", "custom", model_name)  # force reload
     model.conf = pred_conf
-    print("inference time: {:.2f} milliseconds".format((time.time() - s_t) * 1000))
+    print("model loading time: {:.2f} milliseconds".format((time.time() - s_t) * 1000))
     return model
 
 
